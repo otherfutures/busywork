@@ -23,7 +23,7 @@ total accuracy.
 6. Set up a cron job/task scheduler to run once a day (or less/more depending on how you feel)
 7. The very image of success: generating activity everyday to no real end.
 <br><br>
-# Instructions for Setting Up Automatically Running:
+# Instructions for Automatically Running the Program:
 ## Mac/Linux
 1. Open the Terminal application.
 2. Use the crontab command to edit the cron table:
