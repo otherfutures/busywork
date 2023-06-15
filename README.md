@@ -14,7 +14,15 @@ commit & push itself again.<br><br>
 A program for slackers who don't want their activities quantified or measured with<br> 
 total accuracy.
 <br><br>
-
+# Program Instructions
+1. Download/clone the repo
+2. Create a `secrets.txt` file in the same folder/dir. as the program
+3. Write the filepath in the textfile to the `busywork.py` program (e.g. C:\Users\XYZ\busywork\busywork.py)
+4. Save the text file
+5. Init/set up git/GitHub for your local copy of this repo, same as any other repo you'd want to publish on GitHub
+6. Set up a cron job/task scheduler to run once a day (or less/more depending on how you feel)
+7. The very image of success: generating activity everyday to no real end.
+<br><br>
 # Instructions for Setting Up Automatically Running:
 ## Mac/Linux
 1. Open the Terminal application.
