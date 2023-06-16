@@ -1,6 +1,6 @@
 """
-busywork is simple automation program that pumps up GitHub contribution numbers
-by creating pointless edits to itself. 
+busywork is simple automation program that pumps up GitHub contribution stats
+by creating pointless edits to itself. It also emulates the feeling of agile, I guess. 
 
 If
     a) git is installed, &
