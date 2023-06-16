@@ -47,6 +47,7 @@ def make_edit(script_path):
         file.writelines(lines)
 
     # Use Git commands to stage, commit, and push the changes
+    os.system("git pull")
     os.system("git add .")
     os.system(f'git commit -m "{EDIT_MESSAGE}"')
     os.system("git push")
@@ -66,6 +67,7 @@ def revert_edit(script_path):
         file.writelines(lines)
 
     # Use Git commands to stage, commit, and push the revision
+    os.system("git pull")
     os.system("git add .")
     os.system(f'git commit -m "{REVERT_MESSAGE}"')
     os.system("git push")
@@ -81,3 +83,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-06-17
