@@ -18,6 +18,7 @@ total accuracy.
 
 import os
 import random
+import time
 from datetime import datetime
 
 
@@ -30,6 +31,9 @@ BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 
 # Toggle whether to commit/revert a rand. no. of times
 RANDOM = True
+
+# Toggle whether to wait b/w commit/revert cycles
+WAIT = True
 
 
 def random_calls():
@@ -94,10 +98,17 @@ def main():
     else:
         num_calls = 1
 
-    # Runs the commit & revision scripts
+    # Runs the commit & revert scripts
     for _ in range(num_calls):
         make_edit(filepath)
         revert_edit(filepath)
+
+        # Wait a rand. amt. of time b/w commit/revert cycles
+        if RANDOM and WAIT:
+            min_delay = 30  # Seconds
+            max_delay = 125  # Seconds
+            delay = random.uniform(min_delay, max_delay)
+            time.sleep(delay)
 
 
 if __name__ == "__main__":
