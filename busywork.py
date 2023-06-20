@@ -15,8 +15,10 @@ A program for slackers who don't want their activities quantified or measured wi
 total accuracy.
 """
 
+
 import os
-import datetime
+import random
+from datetime import datetime
 
 
 # Git commit messages
@@ -24,20 +26,29 @@ EDIT_MESSAGE = "Self-edit: Add current date"
 REVERT_MESSAGE = "Revert self-edit"
 
 # The pointless edit that's being added & removed
-BUSYWORK_MESSAGE = datetime.datetime.now().strftime("%Y-%m-%d")
+BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
+
+# Toggle whether to commit/revert a rand. no. of times
+RANDOM = True
 
 
-def read_script_path():
-    """Reads the script path from a secrets text file."""
+def random_calls():
+    """Generate a rand. no. to run scripts"""
+    min_calls = 1
+    max_calls = 10
+    return random.randint(min_calls, max_calls)
+
+
+def read_filepath():
+    """Reads the script filepath from a secrets text file."""
     with open("secrets.txt", "r") as file:
         return file.readline().strip()
 
 
 def make_edit(script_path):
     """Makes a small edit to the script, commits, and pushes the changes."""
-    # Read the source code file
     with open(script_path, "r") as file:
-        lines = file.readlines()
+        lines = file.readlines()  # Read this .py file
 
     # Make the edit by appending the pointless edit to this file
     lines.append(f"# Pointless Edit: {BUSYWORK_MESSAGE}\n")
@@ -55,7 +66,7 @@ def make_edit(script_path):
 
 def revert_edit(script_path):
     """Reverts the last edit, commits the revision, and pushes the changes."""
-    # Read the source code file
+
     with open(script_path, "r") as file:
         lines = file.readlines()
 
@@ -74,11 +85,19 @@ def revert_edit(script_path):
 
 
 def main():
-    # Read the script path from the secrets text file
-    script_path = read_script_path()
+    # Read the script filepath from the secrets text file
+    filepath = read_filepath()
 
-    make_edit(script_path)
-    revert_edit(script_path)
+    # Get rand. no. if RANDOM var. is toggled True
+    if RANDOM:
+        num_calls = random_calls()
+    else:
+        num_calls = 1
+
+    # Runs the commit & revision scripts
+    for _ in range(num_calls):
+        make_edit(filepath)
+        revert_edit(filepath)
 
 
 if __name__ == "__main__":
