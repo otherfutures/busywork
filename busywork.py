@@ -33,7 +33,7 @@ BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 RANDOM = True
 
 # Toggle whether to wait b/w commit/revert cycles
-WAIT = True
+WAIT = False
 
 
 def random_calls():
