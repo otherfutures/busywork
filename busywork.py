@@ -12,7 +12,7 @@ If
         commit & push itself again.
 
 A program for slackers who don't want their activities quantified or measured with 
-total accuracy.
+total accuracy
 """
 
 
