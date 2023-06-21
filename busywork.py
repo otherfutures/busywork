@@ -12,7 +12,7 @@ If
         commit & push itself again.
 
 A program for slackers who don't want their activities quantified or measured with 
-total accuracy
+total accuracy.
 """
 
 
@@ -129,3 +129,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-06-22
