@@ -29,11 +29,51 @@ REVERT_MESSAGE = "Revert self-edit"
 # The pointless edit that's being added & removed
 BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 
+# Toggle whether the program will randomly update tdy.
+#  True == 50/50 chance of it committing/reverting tdy.
+#  False == Consistent & daily updates
+RANDOMLY_UPDATE = False
+
 # Toggle whether to commit/revert a rand. no. of times
-RANDOM = True
+RANDOM_NUMBER_OF_UPDATES = True
 
 # Toggle whether to wait b/w commit/revert cycles
 WAIT = False
+
+
+def main():
+    if RANDOMLY_UPDATE:
+        update_today = random_updater()
+    else:
+        update_today = True
+
+    if update_today:
+        # Read the script filepath from the secrets text file
+        filepath = read_filepath()
+
+        # Get rand. no. if RANDOM var. is toggled True
+        if RANDOM_NUMBER_OF_UPDATES:
+            num_calls = random_calls()
+        else:
+            num_calls = 1
+
+        # Runs the commit & revert scripts
+        for _ in range(num_calls):
+            make_edit(filepath)
+            revert_edit(filepath)
+
+            # Wait a rand. amt. of time b/w commit/revert cycles
+            if RANDOM_NUMBER_OF_UPDATES and WAIT:
+                min_delay = 30  # Seconds
+                max_delay = 125  # Seconds
+                delay = random.uniform(min_delay, max_delay)
+                time.sleep(delay)
+
+
+def read_filepath():
+    """Reads the script filepath from a secrets text file."""
+    with open("secrets.txt", "r") as file:
+        return file.readline().strip()
 
 
 def random_calls():
@@ -43,10 +83,9 @@ def random_calls():
     return random.randint(min_calls, max_calls)
 
 
-def read_filepath():
-    """Reads the script filepath from a secrets text file."""
-    with open("secrets.txt", "r") as file:
-        return file.readline().strip()
+def random_updater():
+    """Rand. decides if the program will commit/revert"""
+    return random.choice([True, False])
 
 
 def make_edit(script_path):
@@ -88,28 +127,6 @@ def revert_edit(script_path):
     os.system("git push")
 
 
-def main():
-    # Read the script filepath from the secrets text file
-    filepath = read_filepath()
-
-    # Get rand. no. if RANDOM var. is toggled True
-    if RANDOM:
-        num_calls = random_calls()
-    else:
-        num_calls = 1
-
-    # Runs the commit & revert scripts
-    for _ in range(num_calls):
-        make_edit(filepath)
-        revert_edit(filepath)
-
-        # Wait a rand. amt. of time b/w commit/revert cycles
-        if RANDOM and WAIT:
-            min_delay = 30  # Seconds
-            max_delay = 125  # Seconds
-            delay = random.uniform(min_delay, max_delay)
-            time.sleep(delay)
-
-
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-06-21
