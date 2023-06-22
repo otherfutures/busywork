@@ -42,6 +42,9 @@ WAIT = False
 
 
 def main():
+    # Reset counter
+    counter = 0
+
     if RANDOMLY_UPDATE:
         update_today = random_updater()
     else:
@@ -61,13 +64,15 @@ def main():
         for _ in range(num_calls):
             make_edit(filepath)
             revert_edit(filepath)
-
+            counter += 1
             # Wait a rand. amt. of time b/w commit/revert cycles
             if RANDOM_NUMBER_OF_UPDATES and WAIT:
                 min_delay = 30  # Seconds
                 max_delay = 125  # Seconds
                 delay = random.uniform(min_delay, max_delay)
                 time.sleep(delay)
+
+        print(f"\n\n-----FINISHED WORKING-----\n\n{counter} Commits")
 
 
 def read_filepath():
