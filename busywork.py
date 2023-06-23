@@ -72,7 +72,7 @@ def main():
                 delay = random.uniform(min_delay, max_delay)
                 time.sleep(delay)
 
-        print(f"\n\n-----FINISHED WORKING-----\n\n{counter} Commits")
+        print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
 
 
 def read_filepath():
@@ -134,3 +134,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-06-24
