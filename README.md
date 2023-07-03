@@ -20,7 +20,7 @@ total accuracy.
 3. Write the filepath in the textfile to the `busywork.py` program (e.g. C:\Users\XYZ\busywork\busywork.py)
 4. Save the text file
 5. Init/set up git/GitHub for your local copy of this repo, same as any other repo you'd want to publish on GitHub
-6. Set up a cron job/task scheduler to run once a day (or less/more depending on how you feel)
+6. Set up a cron job/task scheduler to run the .py file once a day (or less/more depending on how you feel)
 7. The very image of success: generating activity everyday to no real end.
 <br><br>
 # Instructions for Automatically Running the Program:
