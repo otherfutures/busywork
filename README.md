@@ -1,15 +1,15 @@
 # Description
 `busywork` is simple automation program that pumps up GitHub contribution stats<br>
-by creating pointless edits to itself. It also emulates the feeling of agile, I guess. <br><br>
+by creating pointless edits to itself. It also emulates the feeling of agile, I guess. <br>
 
-If<br><br>
-a) git is installed, &<br>
-b) a cron job or task is scheduled on the user's computer, it'll:<br><br>
+If<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) git is installed, &<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) a cron job or task is scheduled on the user's computer, it'll:<br>
 
-run once a day (or less/more) & add a comment at the end of the program file,<br>
-commit & push itself to the GitHub repository,<br>
-revert itself back to its original state (i.e. remove the comment), &<br>
-commit & push itself again.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run once a day (or less/more) & add a comment at the end of the program file,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commit & push itself to the GitHub repository,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;revert itself back to its original state (i.e. remove the comment), &<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commit & push itself again.<br>
 
 A program for slackers who don't want their activities quantified or measured with<br> 
 total accuracy.
@@ -47,3 +47,12 @@ crontab -e
 6.  Configure any additional settings as needed and click "OK."
 7.  Review the summary and click "Finish" to create the scheduled task.
 8.  The task will now run automatically based on the specified schedule.
+<br><br>
+# Troubleshooting git/GitHub
+* If GitHub's GCM(GitHub Credential Manager) keeps showing up & requires manual intervention, try entering 
+```
+git remote set-url origin https://<your username>@github.com/<your username>/<repo name>
+```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the terminal (e.g. Git Bash)
+
+* If you're having trouble using CLI for git/GitHub, I recommend the [GitHub desktop client](https://desktop.github.com/); it's much more intuitive (alhough you give up some control using a GUI).
