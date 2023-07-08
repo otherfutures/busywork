@@ -30,8 +30,8 @@ REVERT_MESSAGE = "Revert self-edit"
 BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 
 # Toggle whether the program will randomly update tdy.
-#  True == 50/50 chance of it committing/reverting tdy.
-#  False == Consistent & daily updates
+    #  True == 50/50 chance of it committing/reverting tdy.
+    #  False == Consistent & daily updates
 RANDOMLY_UPDATE = False
 
 # Toggle whether to commit/revert a rand. no. of times
@@ -42,7 +42,6 @@ WAIT = False
 
 
 def main():
-    # Reset counter
     counter = 0
 
     if RANDOMLY_UPDATE:
@@ -60,7 +59,7 @@ def main():
         else:
             num_calls = 1
 
-        # Runs the commit & revert scripts
+        # Pushes the commit, then pushes the reversion 
         for _ in range(num_calls):
             make_edit(filepath)
             revert_edit(filepath)
@@ -77,8 +76,12 @@ def main():
 
 def read_filepath():
     """Reads the script filepath from a secrets text file."""
-    with open("secrets.txt", "r") as file:
-        return file.readline().strip()
+    try:
+        with open("secrets.txt", "r") as file:
+            return file.readline().strip()
+    except FileNotFoundError:
+        print("Can't find secrets.txt")
+        quit()
 
 
 def random_calls():
