@@ -30,9 +30,9 @@ REVERT_MESSAGE = "Revert self-edit"
 BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 
 # Toggle whether the program will randomly update tdy.
-    #  True == 50/50 chance of it committing/reverting tdy.
-    #  False == Consistent & daily updates
-RANDOMLY_UPDATE = False
+#  True == 50/50 chance of it committing/reverting tdy.
+#  False == Consistent & daily updates
+RANDOMLY_UPDATE = True
 
 # Toggle whether to commit/revert a rand. no. of times
 RANDOM_NUMBER_OF_UPDATES = True
@@ -59,7 +59,7 @@ def main():
         else:
             num_calls = 1
 
-        # Pushes the commit, then pushes the reversion 
+        # Pushes the commit, then pushes the reversion
         for _ in range(num_calls):
             make_edit(filepath)
             revert_edit(filepath)
@@ -87,7 +87,7 @@ def read_filepath():
 def random_calls():
     """Generate a rand. no. to run scripts"""
     min_calls = 1
-    max_calls = 10
+    max_calls = 30
     return random.randint(min_calls, max_calls)
 
 
@@ -137,3 +137,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-07-24
