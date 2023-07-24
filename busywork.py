@@ -117,7 +117,13 @@ def open_github(counter):
             if response.status_code == 200:
                 return
         except Exception as e:
-            print(f"Attempt {attempt + 1}: Failed to open GitHub. Retrying in 6 minutes...")
+            # Get the current date and time
+current_datetime = datetime.now()
+
+# Add 6 minutes to the current datetime using timedelta
+new_datetime = current_datetime + timedelta(minutes=6)
+            print(f"Error! Failed to open GitHub - Attempt {attempt +1}"
+                  f" It is now {current_datetime}. Will try again in 6 minutes ({new_datetime})") 
             time.sleep(360)  # Wait 6 min. before retrying
 
     print(f"Unable to open GitHub even after one hour. Program stopped."
@@ -168,4 +174,5 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-07-25
 # Pointless Edit: 2023-07-25
