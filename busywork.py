@@ -17,8 +17,10 @@ total accuracy.
 
 
 import os
+import subprocess
 import random
 import time
+import requests
 from datetime import datetime
 
 
@@ -61,9 +63,14 @@ def main():
 
         # Pushes the commit, then pushes the reversion
         for _ in range(num_calls):
+            # Tests to see if interent is working
+            open_github(counter)
+
+            # The actual edits & pushing
             make_edit(filepath)
             revert_edit(filepath)
             counter += 1
+
             # Wait a rand. amt. of time b/w commit/revert cycles
             if RANDOM_NUMBER_OF_UPDATES and WAIT:
                 min_delay = 30  # Seconds
@@ -71,7 +78,7 @@ def main():
                 delay = random.uniform(min_delay, max_delay)
                 time.sleep(delay)
 
-        print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+    print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
 
 
 def read_filepath():
@@ -94,6 +101,29 @@ def random_calls():
 def random_updater():
     """Rand. decides if the program will commit/revert"""
     return random.choice([True, False])
+
+
+def open_github(counter):
+    url = "https://github.com"
+    HEADERINFO = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
+}
+
+    max_retries = 10  # Retry for an hr. (10 * 6 min.)
+
+    for attempt in range(max_retries):
+        response = requests.get(url, headers=HEADERINFO)
+        if response.status_code == 200:
+            return
+        else:
+            print(f"Attempt {attempt + 1}: Failed to open GitHub. Retrying in 6 minutes...")
+            time.sleep(360)  # Wait 6 min. before retrying
+
+    print(f"Unable to open GitHub even after one hour. Program stopped."
+           f" Last response status code: {response.status_code}"
+           f" Last response text: {response.text}"
+           f" \n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+    sys.exit(1) # Terminate w/ err.
 
 
 def make_edit(script_path):
@@ -137,3 +167,5 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-07-25
+# Pointless Edit: 2023-07-25
