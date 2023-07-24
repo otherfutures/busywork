@@ -112,17 +112,18 @@ def open_github(counter):
     max_retries = 10  # Retry for an hr. (10 * 6 min.)
 
     for attempt in range(max_retries):
-        response = requests.get(url, headers=HEADERINFO)
-        if response.status_code == 200:
-            return
-        else:
+        try:
+            response = requests.get(url, headers=HEADERINFO)
+            if response.status_code == 200:
+                return
+        except Exception as e:
             print(f"Attempt {attempt + 1}: Failed to open GitHub. Retrying in 6 minutes...")
             time.sleep(360)  # Wait 6 min. before retrying
 
     print(f"Unable to open GitHub even after one hour. Program stopped."
-           f" Last response status code: {response.status_code}"
-           f" Last response text: {response.text}"
-           f" \n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+            f" Last response status code: {response.status_code}"
+            f" Last response text: {response.text}"
+            f" \n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
     sys.exit(1) # Terminate w/ err.
 
 
@@ -167,4 +168,5 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-07-25
 # Pointless Edit: 2023-07-25
