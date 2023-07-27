@@ -104,33 +104,36 @@ def random_updater():
 
 
 def open_github(counter):
-    url = "https://github.com"
-    HEADERINFO = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0"
-}
+    URL = "https://github.com"
+    HEADERINFO = {"User-Agent": "Mozilla/5.0"}
 
-    max_retries = 10  # Retry for an hr. (10 * 6 min.)
+    RETRY_INTERVAL = 6  # minutes
+    MAX_RETRIES = 60 // RETRY_INTERVAL  # Retry for an hr.
 
-    for attempt in range(max_retries):
+    for attempt in range(MAX_RETRIES):
         try:
-            response = requests.get(url, headers=HEADERINFO)
+            response = requests.get(URL, headers=HEADERINFO)
             if response.status_code == 200:
                 return
         except Exception as e:
             # Get the current date and time
-current_datetime = datetime.now()
+            current_datetime = datetime.now()
+            new_datetime = (
+                current_datetime + timedelta(minutes=RETRY_INTERVAL)
+            ).strftime("%H:%M")
 
-# Add 6 minutes to the current datetime using timedelta
-new_datetime = current_datetime + timedelta(minutes=6)
-            print(f"Error! Failed to open GitHub - Attempt {attempt +1}"
-                  f" It is now {current_datetime}. Will try again in 6 minutes ({new_datetime})") 
-            time.sleep(360)  # Wait 6 min. before retrying
+            print(
+                f"Error! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
+                f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})"
+            )
+            time.sleep(RETRY_INTERVAL * 60)  # Wait 6 min. before retrying
 
-    print(f"Unable to open GitHub even after one hour. Program stopped."
-            f" Last response status code: {response.status_code}"
-            f" Last response text: {response.text}"
-            f" \n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
-    sys.exit(1) # Terminate w/ err.
+    print(
+        f"Unable to open GitHub even after one hour. Program stopped."
+        f"\nLast response status code: {response.status_code} ({response.text})"
+        f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits"
+    )
+    sys.exit(1)  # Terminate w/ err.
 
 
 def make_edit(script_path):
@@ -174,4 +177,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
-# Pointless Edit: 2023-07-25
+# Pointless Edit: 2023-07-28
