@@ -177,4 +177,3 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
-# Pointless Edit: 2023-07-28
