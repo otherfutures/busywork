@@ -83,8 +83,8 @@ def main():
             open_github(counter)
 
             # The actual edits & pushing
-            make_edit(filepath)
-            revert_edit(filepath)
+            make_edit(counter, filepath)
+            revert_edit(counter, filepath)
             counter += 1
 
             # Wait a rand. amt. of time b/w commit/revert cycles
@@ -134,7 +134,7 @@ def open_github(counter):
             ).strftime("%H:%M")
 
             print(
-                f"\n\nError! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
+                f"\n\nError! Failed to open GitHub - Attempt {attempt + 1}/{MAX_RETRIES}"
                 f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})"
             )
             time.sleep(RETRY_INTERVAL * 60)  # Wait 6 min. before retrying
@@ -147,26 +147,29 @@ def open_github(counter):
     sys.exit(1)  # Terminate w/ err.
 
 
-def make_edit(script_path):
+def make_edit(counter, script_path):
     """Makes a small edit to the script, commits, and pushes the changes."""
-    with open(script_path, "r") as file:
-        lines = file.readlines()  # Read this .py file
+    try:
+        with open(script_path, "r") as file:
+            lines = file.readlines()  # Read this .py file
 
-    # Make the edit by appending the pointless edit to this file
-    lines.append(f"# Pointless Edit: {BUSYWORK_MESSAGE}\n")
+        # Make the edit by appending the pointless edit to this file
+        lines.append(f"# Pointless Edit: {BUSYWORK_MESSAGE}\n")
 
-    # Write the modified content back to the file
-    with open(script_path, "w") as file:
-        file.writelines(lines)
+        # Write the modified content back to the file
+        with open(script_path, "w") as file:
+            file.writelines(lines)
 
-    # Use Git commands to stage, commit, and push the changes
-    os.system("git add .")
-    os.system(f'git commit -m "{EDIT_MESSAGE}"')
-    os.system("git pull")
-    os.system("git push")
+        # Use Git commands to stage, commit, and push the changes
+        os.system("git add .")
+        os.system(f'git commit -m "{EDIT_MESSAGE}"')
+        os.system("git pull")
+        os.system("git push")
+    except Exception:
+        open_github(counter)
 
 
-def revert_edit(script_path):
+def revert_edit(counter, script_path):
     """Reverts the last edit, commits the revision, and pushes the changes."""
 
     with open(script_path, "r") as file:
@@ -192,3 +195,4 @@ def finish(counter):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-10
