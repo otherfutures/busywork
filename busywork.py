@@ -21,7 +21,8 @@ import subprocess
 import random
 import time
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
+import sys
 
 
 # Git commit messages
@@ -42,6 +43,10 @@ RANDOM_NUMBER_OF_UPDATES = True
 # Toggle whether to wait b/w commit/revert cycles
 WAIT = False
 
+# Checking for internet
+MAX_RETRIES = 5  # Maximum number of retries
+WAIT_TIME = 10  # Time to wait (in seconds) before retrying
+
 
 def main():
     counter = 0
@@ -52,6 +57,17 @@ def main():
         update_today = True
 
     if update_today:
+        if not check_internet():
+            retries = 0
+
+            while retries < MAX_RETRIES:
+                if check_internet():
+                    break
+                else:
+                    print("Offline. Retrying in {} seconds...".format(WAIT_TIME))
+                    time.sleep(WAIT_TIME)
+                    retries += 1
+
         # Read the script filepath from the secrets text file
         filepath = read_filepath()
 
@@ -78,7 +94,15 @@ def main():
                 delay = random.uniform(min_delay, max_delay)
                 time.sleep(delay)
 
-    print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+        print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+
+
+def check_internet():
+    try:
+        response = requests.get("http://www.github.com", timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False
 
 
 def read_filepath():
@@ -177,3 +201,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-10
