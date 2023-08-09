@@ -37,15 +37,23 @@ BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 #  False == Consistent & daily updates
 RANDOMLY_UPDATE = False
 
+# Range of commits; exact no. chosen by random_calls()
+MIN_CALLS = 1
+MAX_CALLS = 2
+
 # Toggle whether to commit/revert a rand. no. of times
 RANDOM_NUMBER_OF_UPDATES = True
 
 # Toggle whether to wait b/w commit/revert cycles
 WAIT = False
 
+# Wait intervals
+MIN_WAIT = 30  # Seconds
+MAX_WAIT = 125  # Seconds
+
 # Checking for internet
-MAX_RETRIES = 5  # Maximum number of retries
-WAIT_TIME = 10  # Time to wait (in seconds) before retrying
+RETRY_INTERVAL = 6  # minutes
+MAX_RETRIES = 60 // RETRY_INTERVAL  # Retry for an hr.
 
 
 def main():
@@ -81,12 +89,10 @@ def main():
 
             # Wait a rand. amt. of time b/w commit/revert cycles
             if RANDOM_NUMBER_OF_UPDATES and WAIT:
-                min_delay = 30  # Seconds
-                max_delay = 125  # Seconds
-                delay = random.uniform(min_delay, max_delay)
+                delay = random.uniform(MIN_WAIT, MAX_WAIT)
                 time.sleep(delay)
 
-        print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+        finish(counter)
 
 
 def read_filepath():
@@ -100,10 +106,8 @@ def read_filepath():
 
 
 def random_calls():
-    """Generate a rand. no. to run scripts"""
-    min_calls = 1
-    max_calls = 1
-    return random.randint(min_calls, max_calls)
+    """Generate a rand. no. of how many times script is run"""
+    return random.randint(MIN_CALLS, MAX_CALLS)
 
 
 def random_updater():
@@ -116,9 +120,6 @@ def open_github(counter):
 
     URL = "https://github.com"
     HEADERINFO = {"User-Agent": "Mozilla/5.0"}
-
-    RETRY_INTERVAL = 6  # minutes
-    MAX_RETRIES = 60 // RETRY_INTERVAL  # Retry for an hr.
 
     for attempt in range(MAX_RETRIES):
         try:
@@ -133,16 +134,16 @@ def open_github(counter):
             ).strftime("%H:%M")
 
             print(
-                f"\033[93mError! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
-                f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})\033[0m"
+                f"\n\nError! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
+                f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})"
             )
             time.sleep(RETRY_INTERVAL * 60)  # Wait 6 min. before retrying
 
     print(
-        f"\033[91mUnable to open GitHub even after one hour. Program stopped.\033[0m"
+        f"\n\nUnable to open GitHub even after one hour. Program stopped."
         f"\nLast response status code: {response.status_code} ({response.text})"
-        f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits"
     )
+    finish(counter)
     sys.exit(1)  # Terminate w/ err.
 
 
@@ -185,5 +186,10 @@ def revert_edit(script_path):
     os.system("git push")
 
 
+def finish(counter):
+    print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+
+
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-10
