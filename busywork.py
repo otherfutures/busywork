@@ -35,7 +35,7 @@ BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 # Toggle whether the program will randomly update tdy.
 #  True == 50/50 chance of it committing/reverting tdy.
 #  False == Consistent & daily updates
-RANDOMLY_UPDATE = True
+RANDOMLY_UPDATE = False
 
 # Toggle whether to commit/revert a rand. no. of times
 RANDOM_NUMBER_OF_UPDATES = True
@@ -57,16 +57,8 @@ def main():
         update_today = True
 
     if update_today:
-        if not check_internet():
-            retries = 0
-
-            while retries < MAX_RETRIES:
-                if check_internet():
-                    break
-                else:
-                    print("Offline. Retrying in {} seconds...".format(WAIT_TIME))
-                    time.sleep(WAIT_TIME)
-                    retries += 1
+        # Check internet conn.
+        open_github(counter)
 
         # Read the script filepath from the secrets text file
         filepath = read_filepath()
@@ -97,14 +89,6 @@ def main():
         print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
 
 
-def check_internet():
-    try:
-        response = requests.get("http://www.github.com", timeout=5)
-        return True
-    except requests.ConnectionError:
-        return False
-
-
 def read_filepath():
     """Reads the script filepath from a secrets text file."""
     try:
@@ -112,13 +96,13 @@ def read_filepath():
             return file.readline().strip()
     except FileNotFoundError:
         print("Can't find secrets.txt")
-        quit()
+        sys.exit(1)
 
 
 def random_calls():
     """Generate a rand. no. to run scripts"""
     min_calls = 1
-    max_calls = 30
+    max_calls = 1
     return random.randint(min_calls, max_calls)
 
 
@@ -128,6 +112,8 @@ def random_updater():
 
 
 def open_github(counter):
+    """Checks to see if there's internet & can push to GitHub"""
+
     URL = "https://github.com"
     HEADERINFO = {"User-Agent": "Mozilla/5.0"}
 
@@ -147,13 +133,13 @@ def open_github(counter):
             ).strftime("%H:%M")
 
             print(
-                f"Error! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
-                f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})"
+                f"\033[93mError! Failed to open GitHub - Attempt {attempt +1}/{MAX_RETRIES}"
+                f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})\033[0m"
             )
             time.sleep(RETRY_INTERVAL * 60)  # Wait 6 min. before retrying
 
     print(
-        f"Unable to open GitHub even after one hour. Program stopped."
+        f"\033[91mUnable to open GitHub even after one hour. Program stopped.\033[0m"
         f"\nLast response status code: {response.status_code} ({response.text})"
         f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits"
     )
@@ -201,3 +187,4 @@ def revert_edit(script_path):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-10
