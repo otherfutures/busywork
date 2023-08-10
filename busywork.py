@@ -39,7 +39,7 @@ RANDOMLY_UPDATE = False
 
 # Range of commits; exact no. chosen by random_calls()
 MIN_CALLS = 1
-MAX_CALLS = 2
+MAX_CALLS = 30
 
 # Toggle whether to commit/revert a rand. no. of times
 RANDOM_NUMBER_OF_UPDATES = True
@@ -79,18 +79,18 @@ def main():
 
         # Pushes the commit, then pushes the reversion
         for _ in range(num_calls):
-            # Tests to see if interent is working
-            open_github(counter)
+            try:
+                # The actual edits & pushing
+                make_edit(counter, filepath)
+                revert_edit(counter, filepath)
+                counter += 1
 
-            # The actual edits & pushing
-            make_edit(counter, filepath)
-            revert_edit(counter, filepath)
-            counter += 1
-
-            # Wait a rand. amt. of time b/w commit/revert cycles
-            if RANDOM_NUMBER_OF_UPDATES and WAIT:
-                delay = random.uniform(MIN_WAIT, MAX_WAIT)
-                time.sleep(delay)
+                # Wait a rand. amt. of time b/w commit/revert cycles
+                if RANDOM_NUMBER_OF_UPDATES and WAIT:
+                    delay = random.uniform(MIN_WAIT, MAX_WAIT)
+                    time.sleep(delay)
+            except Exception as e:
+                open_github(counter)
 
         finish(counter)
 
@@ -135,12 +135,13 @@ def open_github(counter):
 
             print(
                 f"\n\nError! Failed to open GitHub - Attempt {attempt + 1}/{MAX_RETRIES}"
+                f"\nStatus Code: {response.status_code}"
                 f"\nWill try again in {RETRY_INTERVAL} minutes (i.e. at {new_datetime})"
             )
             time.sleep(RETRY_INTERVAL * 60)  # Wait 6 min. before retrying
 
     print(
-        f"\n\nUnable to open GitHub even after one hour. Program stopped."
+        f"\n\nUnable to open GitHub after one hour. Program stopped."
         f"\nLast response status code: {response.status_code} ({response.text})"
     )
     finish(counter)
@@ -149,44 +150,53 @@ def open_github(counter):
 
 def make_edit(counter, script_path):
     """Makes a small edit to the script, commits, and pushes the changes."""
-    try:
-        with open(script_path, "r") as file:
-            lines = file.readlines()  # Read this .py file
 
-        # Make the edit by appending the pointless edit to this file
-        lines.append(f"# Pointless Edit: {BUSYWORK_MESSAGE}\n")
+    while True:
+        try:
+            with open(script_path, "r") as file:
+                lines = file.readlines()  # Read this .py file
 
-        # Write the modified content back to the file
-        with open(script_path, "w") as file:
-            file.writelines(lines)
+            # Make the edit by appending the pointless edit to this file
+            lines.append(f"# Pointless Edit: {BUSYWORK_MESSAGE}\n")
 
-        # Use Git commands to stage, commit, and push the changes
-        os.system("git add .")
-        os.system(f'git commit -m "{EDIT_MESSAGE}"')
-        os.system("git pull")
-        os.system("git push")
-    except Exception:
-        open_github(counter)
+            # Write the modified content back to the file
+            with open(script_path, "w") as file:
+                file.writelines(lines)
+
+            # Use Git commands to stage, commit, and push the changes
+            os.system("git add .")
+            os.system(f'git commit -m "{EDIT_MESSAGE}"')
+            os.system("git pull")
+            os.system("git push")
+            break
+        except Exception as e:
+            open_github(counter)
 
 
 def revert_edit(counter, script_path):
     """Reverts the last edit, commits the revision, and pushes the changes."""
 
-    with open(script_path, "r") as file:
-        lines = file.readlines()
+    while True:
+        try:
+            with open(script_path, "r") as file:
+                lines = file.readlines()
 
-    # Remove the last line (the edit)
-    lines = lines[:-1]
+            # Remove the last line (the edit)
+            lines = lines[:-1]
 
-    # Write the revised content back to the file
-    with open(script_path, "w") as file:
-        file.writelines(lines)
+            # Write the revised content back to the file
+            with open(script_path, "w") as file:
+                file.writelines(lines)
 
-    # Use Git commands to stage, commit, and push the revision
-    os.system("git add .")
-    os.system(f'git commit -m "{REVERT_MESSAGE}"')
-    os.system("git pull")
-    os.system("git push")
+            # Use Git commands to stage, commit, and push the revision
+            os.system("git add .")
+            os.system(f'git commit -m "{REVERT_MESSAGE}"')
+            os.system("git pull")
+            os.system("git push")
+            break
+
+        except Exception as e:
+            open_github(counter)
 
 
 def finish(counter):
@@ -195,3 +205,4 @@ def finish(counter):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-11
