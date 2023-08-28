@@ -35,7 +35,7 @@ BUSYWORK_MESSAGE = datetime.now().strftime("%Y-%m-%d")
 # Toggle whether the program will randomly update tdy.
 #  True == 50/50 chance of it committing/reverting tdy.
 #  False == Consistent & daily updates
-RANDOMLY_UPDATE = False
+RANDOMLY_UPDATE = True
 
 # Range of commits; exact no. chosen by random_calls()
 MIN_CALLS = 1
@@ -205,3 +205,4 @@ def finish(counter):
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-08-29
