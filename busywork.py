@@ -92,7 +92,7 @@ def main():
             except Exception as e:
                 open_github(counter)
 
-        finish(counter)
+    finish(counter)
 
 
 def read_filepath():
@@ -200,8 +200,9 @@ def revert_edit(counter, script_path):
 
 
 def finish(counter):
-    print(f"\n\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
+    print(f"\n-----FINISHED WORKING-----\n\n{counter * 2} Commits")
 
 
 if __name__ == "__main__":
     main()
+# Pointless Edit: 2023-09-25
